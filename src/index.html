@@ -6,8 +6,763 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    :root {
+      --color-primary: #2d8a8e;
+      --color-primary-hover: #1d746f;
+      --color-success: #16a34a;
+      --color-error: #dc2626;
+      --color-warning: #ea580c;
+      --color-bg: #f8f9fa;
+      --color-surface: #ffffff;
+      --color-text: #1f2937;
+      --color-text-light: #6b7280;
+      --color-border: #e5e7eb;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--color-primary) 0%, #1d9299 100%);
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+      margin-bottom: 30px;
+      border-radius: 12px;
+      box-shadow: var(--shadow-md);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 968px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--color-surface);
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--color-border);
+    }
+
+    .card h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--color-text);
+    }
+
+    input[type="text"], input[type="number"], textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(45, 138, 142, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      flex: 1;
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary {
+      background-color: var(--color-warning);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: #c2410c;
+    }
+
+    .btn-danger {
+      background-color: var(--color-error);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #b91c1c;
+    }
+
+    .btn-success {
+      background-color: var(--color-success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background-color: #15803d;
+    }
+
+    .input-hint {
+      font-size: 12px;
+      color: var(--color-text-light);
+      margin-top: 5px;
+    }
+
+    /* Template Buttons */
+    .template-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .template-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .template-btn {
+      background: linear-gradient(135deg, var(--color-success) 0%, #22c55e 100%);
+      border: 2px solid var(--color-success);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 18px;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .template-btn:hover {
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .template-btn.template1 {
+      background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+      border-color: #8b5cf6;
+    }
+
+    .template-btn.template1:hover {
+      background: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%);
+    }
+
+    .template-btn.template2 {
+      background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+      border-color: #f59e0b;
+    }
+
+    .template-btn.template2:hover {
+      background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+    }
+
+    /* Section Config */
+    #sectionsConfig {
+      display: grid;
+      gap: 15px;
+      min-height: 120px;
+    }
+
+    .section-config-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: flex-end;
+      padding: 20px;
+      background: linear-gradient(135deg, #f0fdfb 0%, #ccfbf1 100%);
+      border: 2px solid var(--color-primary);
+      border-radius: 12px;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+    }
+
+    .section-config-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    }
+
+    @media (max-width: 768px) {
+      .section-config-item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+    }
+
+    .section-config-item .toggle-lead-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      border-radius: 10px;
+      border: 2px solid var(--color-border);
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .section-config-item .toggle-lead-btn:hover {
+      border-color: var(--color-primary);
+      background: var(--color-primary);
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .section-config-item .toggle-lead-btn.active {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-color: var(--color-warning);
+      box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.2);
+    }
+
+    .section-config-label {
+      font-size: 13px;
+      color: var(--color-text);
+      margin-bottom: 6px;
+      display: block;
+      font-weight: 500;
+    }
+
+    .no-sections {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--color-text-light);
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border: 3px dashed var(--color-border);
+      border-radius: 16px;
+      margin: 20px 0;
+    }
+
+    .no-sections h3 {
+      color: var(--color-primary);
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+
+    /* Results styling */
+    .results {
+      background: var(--color-surface);
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--color-border);
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .section-card {
+      background: linear-gradient(135deg, #f0fdfb 0%, #ecfdf5 100%);
+      border: 2px solid var(--color-primary);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-title {
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 15px;
+      font-size: 18px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(45, 138, 142, 0.2);
+    }
+
+    .section-members {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .member-item {
+      background: white;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 15px;
+      border-left: 4px solid var(--color-primary);
+      color: var(--color-text);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .member-item.absent {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left-color: var(--color-warning);
+      color: #92400e;
+    }
+
+    .reserve-section {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border: 2px solid var(--color-warning);
+    }
+
+    .reserve-title {
+      color: var(--color-warning);
+      border-bottom-color: rgba(234, 88, 12, 0.3);
+    }
+
+    .reserve-member {
+      border-left-color: var(--color-warning);
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .info-box, .alert, .stats, .stat-box, .copy-button {
+      /* Simplified styling */
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-box {
+      background: linear-gradient(135deg, var(--color-primary) 0%, #1d9299 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .alert {
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+      border-left: 4px solid var(--color-success);
+    }
+
+    .alert-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border-left: 4px solid var(--color-warning);
+    }
+  </style>
 </head>
 <body>
   <app-root></app-root>
+  <script>
+    let sections = [];
+
+    function initializeSections() {
+      sections = [];
+      showNoSectionsMessage();
+    }
+
+    function showNoSectionsMessage() {
+      const container = document.getElementById('sectionsConfig');
+      container.innerHTML = `
+                <div class="no-sections">
+                    <h3>📭 Belum Ada Konfigurasi</h3>
+                    <p>Pilih <strong>Template 1</strong> atau <strong>Template 2</strong> untuk memulai</p>
+                    <p>atau gunakan tombol ➕ untuk manual</p>
+                </div>
+            `;
+    }
+
+    // TEMPLATE 1: 5 Bagian (Min 7, Max 12)
+    function setTemplate1() {
+      sections = [
+        { id: 0, name: 'Row 1', minPeople: 1, maxPeople: 3, hasLead: false },
+        { id: 1, name: 'Row 2', minPeople: 1, maxPeople: 3, hasLead: false },
+        { id: 2, name: 'Row 3', minPeople: 2, maxPeople: 2, hasLead: false },
+        { id: 3, name: 'Row 4', minPeople: 1, maxPeople: 2, hasLead: false },
+        { id: 4, name: 'Row 5', minPeople: 2, maxPeople: 2, hasLead: false }
+      ];
+      renderSectionConfig();
+      showTemplateMessage('Template 1 (5 Bagian) dimuat! Min: 7 • Max: 12');
+    }
+
+    // TEMPLATE 2: 5 Bagian (Min 6, Max 13)
+    function setTemplate2() {
+      sections = [
+        { id: 0, name: 'Row 1', minPeople: 2, maxPeople: 3, hasLead: false },
+        { id: 1, name: 'Row 2', minPeople: 1, maxPeople: 3, hasLead: false },
+        { id: 2, name: 'Row 3', minPeople: 1, maxPeople: 3, hasLead: false },
+        { id: 3, name: 'Row 4', minPeople: 1, maxPeople: 2, hasLead: false },
+        { id: 4, name: 'Row 5', minPeople: 1, maxPeople: 2, hasLead: false }
+      ];
+      renderSectionConfig();
+      showTemplateMessage('Template 2 (5 Bagian) dimuat! Min: 6 • Max: 13');
+    }
+
+    function showTemplateMessage(message) {
+      const alertHtml = `<div class="alert alert-success">${message}</div>`;
+      document.getElementById('alertContainer').innerHTML = alertHtml;
+      setTimeout(() => {
+        document.getElementById('alertContainer').innerHTML = '';
+      }, 3000);
+    }
+
+    function addSection() {
+      const newId = sections.length > 0 ? Math.max(...sections.map(s => s.id), -1) + 1 : 0;
+      sections.push({
+        id: newId,
+        name: `Row ${sections.length + 1}`,
+        minPeople: 1,
+        maxPeople: 3,
+        hasLead: false
+      });
+      renderSectionConfig();
+    }
+
+    function removeSection() {
+      if (sections.length <= 0) {
+        alert('Tidak ada row untuk dihapus!');
+        return;
+      }
+      if (sections.length === 1) {
+        sections = [];
+        showNoSectionsMessage();
+        return;
+      }
+      sections.pop();
+      renderSectionConfig();
+    }
+
+    function renderSectionConfig() {
+      const container = document.getElementById('sectionsConfig');
+      if (sections.length === 0) {
+        showNoSectionsMessage();
+        return;
+      }
+
+      container.innerHTML = '';
+      sections.forEach((section, index) => {
+        const configHtml = `
+                    <div class="section-config-item">
+                        <div>
+                            <span class="section-config-label">Row ${index + 1}</span>
+                            <input type="text" id="sectionName_${section.id}" value="${section.name}" placeholder="Nama row">
+                        </div>
+                        <div>
+                            <span class="section-config-label">Min</span>
+                            <input type="number" id="sectionMin_${section.id}" value="${section.minPeople}" min="0" max="20">
+                        </div>
+                        <div>
+                            <span class="section-config-label">Max</span>
+                            <input type="number" id="sectionMax_${section.id}" value="${section.maxPeople}" min="1" max="20">
+                        </div>
+                        <button type="button" class="toggle-lead-btn ${section.hasLead ? 'active' : ''}" id="leadBtn_${section.id}" title="Toggle Pemimpin">👑</button>
+                    </div>
+                `;
+        container.insertAdjacentHTML('beforeend', configHtml);
+
+        const nameInput = document.getElementById(`sectionName_${section.id}`);
+        const minInput = document.getElementById(`sectionMin_${section.id}`);
+        const maxInput = document.getElementById(`sectionMax_${section.id}`);
+
+        nameInput.addEventListener('change', () => {
+          sections[index].name = nameInput.value || `Row ${index + 1}`;
+        });
+
+        minInput.addEventListener('change', () => {
+          const min = parseInt(minInput.value) || 0;
+          const max = parseInt(maxInput.value) || 3;
+          if (min > max) {
+            minInput.value = max;
+            sections[index].minPeople = max;
+          } else {
+            sections[index].minPeople = min;
+          }
+        });
+
+        maxInput.addEventListener('change', () => {
+          const min = parseInt(minInput.value) || 0;
+          const max = parseInt(maxInput.value) || 3;
+          if (max < min) {
+            maxInput.value = min;
+            sections[index].maxPeople = min;
+          } else {
+            sections[index].maxPeople = max;
+          }
+        });
+
+        const leadBtn = document.getElementById(`leadBtn_${section.id}`);
+        if (leadBtn) {
+          leadBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sections[index].hasLead = !sections[index].hasLead;
+            leadBtn.classList.toggle('active');
+          });
+        }
+      });
+    }
+
+    function distributeSchedule() {
+      if (!document.getElementById('namesList').value.trim()) {
+        alert('Mohon masukkan nama pelayanan!');
+        return;
+      }
+      if (sections.length === 0) {
+        alert('Pilih Template 1 atau Template 2 terlebih dahulu!');
+        return;
+      }
+
+      const namesList = document.getElementById('namesList').value.trim();
+      const leadCandidatesList = document.getElementById('leadCandidates').value.trim();
+
+      sections.forEach((section, idx) => {
+        const name = document.getElementById(`sectionName_${section.id}`)?.value || section.name;
+        const minPeople = parseInt(document.getElementById(`sectionMin_${section.id}`)?.value) || 0;
+        const maxPeople = parseInt(document.getElementById(`sectionMax_${section.id}`)?.value) || 3;
+        sections[idx].name = name;
+        sections[idx].minPeople = minPeople;
+        sections[idx].maxPeople = maxPeople;
+      });
+
+      const allNames = namesList.split('\n').map(name => name.trim()).filter(name => name.length > 0);
+      const leadCandidates = leadCandidatesList.split('\n').map(name => name.trim()).filter(name => name.length > 0);
+      const presentNames = allNames;
+      const availableLeads = leadCandidates.length > 0 ? presentNames.filter(name => leadCandidates.includes(name)) : presentNames;
+
+      const totalMax = sections.reduce((sum, sec) => sum + sec.maxPeople, 0);
+      const totalMin = sections.reduce((sum, sec) => sum + sec.minPeople, 0);
+      const totalAvailable = presentNames.length;
+
+      // Hitung jumlah orang yang akan ditempatkan di sections
+      let assignedCount = Math.min(totalAvailable, totalMax);
+      let reserveCount = Math.max(0, totalAvailable - totalMax);
+
+      // Buat adjustedCount untuk sections saja (maksimal totalMax orang)
+      let adjustedCount = [...sections.map(s => s.minPeople)];
+      let remainingPeopleForSections = assignedCount - totalMin;
+
+      if (assignedCount < totalMin) {
+        adjustedCount = [...sections.map(() => 0)];
+        for (let i = 0; i < assignedCount; i++) {
+          adjustedCount[i % sections.length]++;
+        }
+      } else {
+        let index = 0;
+        while (remainingPeopleForSections > 0) {
+          if (adjustedCount[index] < sections[index].maxPeople) {
+            adjustedCount[index]++;
+            remainingPeopleForSections--;
+          }
+          index = (index + 1) % sections.length;
+        }
+      }
+
+      // Update section counts
+      sections.forEach((section, idx) => {
+        section.count = adjustedCount[idx];
+      });
+
+      // Siapkan data untuk distribusi
+      let alertHtml = '';
+      if (totalAvailable < totalMin) {
+        alertHtml += `<div class="alert alert-warning">⚠️ Hanya ${totalAvailable} pelayan, kurang dari min ${totalMin}</div>`;
+      } else if (reserveCount > 0) {
+        alertHtml += `<div class="alert alert-success">✅ ${assignedCount} pelayan ditempatkan, ${reserveCount} pelayan <strong>CADANGAN</strong></div>`;
+      } else if (totalAvailable < totalMax) {
+        alertHtml += `<div class="alert alert-warning">⚠️ ${totalAvailable} pelayan, max ${totalMax}</div>`;
+      }
+
+      // Distribusi pelayan ke sections
+      const schedule = Array(sections.length).fill().map(() => []);
+      let assignments = [];
+      sections.forEach((section) => {
+        for (let i = 0; i < section.count; i++) {
+          assignments.push(sections.indexOf(section));
+        }
+      });
+
+      // Shuffle assignments
+      assignments.sort(() => Math.random() - 0.5);
+
+      // Assign pelayan ke sections
+      for (let i = 0; i < assignments.length; i++) {
+        schedule[assignments[i]].push(presentNames[i]);
+      }
+
+      // Shuffle dalam masing-masing section
+      schedule.forEach(s => s.sort(() => Math.random() - 0.5));
+
+      // Buat reserve section jika ada
+      let reserveSectionHtml = '';
+      if (reserveCount > 0) {
+        const reserveNames = presentNames.slice(assignments.length);
+        reserveNames.sort(() => Math.random() - 0.5);
+
+        let reserveMembersHtml = '';
+        reserveNames.forEach(name => {
+          reserveMembersHtml += `<div class="member-item reserve-member">💎 ${name}</div>`;
+        });
+
+        reserveSectionHtml = `
+                    <div class="section-card reserve-section">
+                        <div class="section-title reserve-title">🪙 CADANGAN (${reserveCount} orang)</div>
+                        <div class="section-members">${reserveMembersHtml}</div>
+                    </div>
+                `;
+      }
+
+      // Generate HTML untuk sections
+      let resultsHtml = '';
+      sections.forEach((section, index) => {
+        const members = schedule[index];
+        let membersHtml = '';
+
+        if (section.hasLead && members.length > 0 && availableLeads.length > 0) {
+          const lead = members.find(n => availableLeads.includes(n));
+          if (lead) {
+            membersHtml += `<div class="member-item" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left-color: var(--color-warning); font-weight: 600;">👑 ${lead} - PEMIMPIN</div>`;
+            members.filter(n => n !== lead).forEach(name => {
+              membersHtml += `<div class="member-item">${name}</div>`;
+            });
+          } else {
+            members.forEach(name => {
+              membersHtml += `<div class="member-item">${name}</div>`;
+            });
+          }
+        } else {
+          members.forEach(name => {
+            membersHtml += `<div class="member-item">${name}</div>`;
+          });
+        }
+
+        resultsHtml += `<div class="section-card">
+                    <div class="section-title">${section.name} (${section.count} orang)</div>
+                    <div class="section-members">${membersHtml}</div>
+                </div>`;
+      });
+
+      // Update stats
+      document.getElementById('statsContainer').innerHTML = `
+                <div class="stat-box"><div class="stat-value">${presentNames.length}</div><div class="stat-label">Total Pelayan</div></div>
+                <div class="stat-box"><div class="stat-value">${sections.length}</div><div class="stat-label">Total Row</div></div>
+                <div class="stat-box"><div class="stat-value">${totalMin}-${totalMax}</div><div class="stat-label">Kapasitas</div></div>
+                ${reserveCount > 0 ? `<div class="stat-box"><div class="stat-value">${reserveCount}</div><div class="stat-label">Cadangan</div></div>` : ''}
+            `;
+
+      document.getElementById('alertContainer').innerHTML = alertHtml;
+      document.getElementById('resultsGrid').innerHTML = resultsHtml + reserveSectionHtml;
+      document.getElementById('resultsContainer').style.display = 'block';
+      document.getElementById('resultsContainer').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function clearForm() {
+      if (confirm('Hapus semua data?')) {
+        document.getElementById('namesList').value = '';
+        document.getElementById('leadCandidates').value = '';
+        document.getElementById('resultsContainer').style.display = 'none';
+        initializeSections();
+        document.getElementById('namesList').focus();
+      }
+    }
+
+    function printResults() {
+      window.print();
+    }
+
+    window.addEventListener('load', () => {
+      initializeSections();
+      document.getElementById('namesList').focus();
+    });
+  </script>
 </body>
 </html>
