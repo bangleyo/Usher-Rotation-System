@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>UsherScheduler</title>
+  <title>Usher Rotation System</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -456,37 +456,42 @@
       const container = document.getElementById('sectionsConfig');
       container.innerHTML = `
                 <div class="no-sections">
-                    <h3>📭 Belum Ada Konfigurasi</h3>
-                    <p>Pilih <strong>Template 1</strong> atau <strong>Template 2</strong> untuk memulai</p>
-                    <p>atau gunakan tombol ➕ untuk manual</p>
+                    <h3>📭 Belum Ada Bagian Pelayanan</h3>
+                    <p>Pilih <strong>Sebelum Ibadah</strong> atau <strong>Sesudah ibadah</strong> untuk memulai</p>
+                    <p>atau gunakan tombol "Tambahkan Bagian Pelayanan" untuk manual</p>
                 </div>
             `;
     }
 
-    // TEMPLATE 1: 5 Bagian (Min 7, Max 12)
+    // TEMPLATE SEBELUM IBADAH
     function setTemplate1() {
       sections = [
-        { id: 0, name: 'Row 1', minPeople: 1, maxPeople: 3, hasLead: false },
+        { id: 0, name: 'Row 1', minPeople: 0, maxPeople: 3, hasLead: false },
         { id: 1, name: 'Row 2', minPeople: 1, maxPeople: 3, hasLead: false },
-        { id: 2, name: 'Row 3', minPeople: 2, maxPeople: 2, hasLead: false },
-        { id: 3, name: 'Row 4', minPeople: 1, maxPeople: 2, hasLead: false },
-        { id: 4, name: 'Row 5', minPeople: 2, maxPeople: 2, hasLead: false }
+        { id: 2, name: 'Row 3', minPeople: 1, maxPeople: 2, hasLead: false },
+        { id: 3, name: 'Row 4', minPeople: 2, maxPeople: 2, hasLead: false },
+        { id: 4, name: 'Row 5', minPeople: 2, maxPeople: 2, hasLead: false },
+        { id: 5, name: 'Row 6', minPeople: 1, maxPeople: 2, hasLead: false },
+        { id: 6, name: 'Row 7', minPeople: 1, maxPeople: 3, hasLead: false },
+        { id: 7, name: 'Row 8', minPeople: 0, maxPeople: 3, hasLead: false },
+        { id: 8, name: 'Greeter', minPeople: 1, maxPeople: 2, hasLead: false },
+        { id: 9, name: 'Regis', minPeople: 3, maxPeople: 7, hasLead: true }
       ];
       renderSectionConfig();
-      showTemplateMessage('Template 1 (5 Bagian) dimuat! Min: 7 • Max: 12');
+      showTemplateMessage('Template Pelayanan Sebelum Ibadah');
     }
 
-    // TEMPLATE 2: 5 Bagian (Min 6, Max 13)
+    // TEMPLATE SESUDAH IBADAH
     function setTemplate2() {
       sections = [
-        { id: 0, name: 'Row 1', minPeople: 2, maxPeople: 3, hasLead: false },
-        { id: 1, name: 'Row 2', minPeople: 1, maxPeople: 3, hasLead: false },
-        { id: 2, name: 'Row 3', minPeople: 1, maxPeople: 3, hasLead: false },
-        { id: 3, name: 'Row 4', minPeople: 1, maxPeople: 2, hasLead: false },
-        { id: 4, name: 'Row 5', minPeople: 1, maxPeople: 2, hasLead: false }
+        { id: 0, name: 'Pintu P-12', minPeople: 1, maxPeople: 7, hasLead: false },
+        { id: 1, name: 'Pintu Multimedia', minPeople: 1, maxPeople: 7, hasLead: false },
+        { id: 2, name: 'Lift APL', minPeople: 2, maxPeople: 5, hasLead: false },
+        { id: 3, name: 'Barisan Megasa', minPeople: 3, maxPeople: 8, hasLead: true },
+        { id: 4, name: 'Eskalator P-12', minPeople: 0, maxPeople: 4, hasLead: false }
       ];
       renderSectionConfig();
-      showTemplateMessage('Template 2 (5 Bagian) dimuat! Min: 6 • Max: 13');
+      showTemplateMessage('Template Pelayanan Sesudah Ibadah');
     }
 
     function showTemplateMessage(message) {
@@ -501,7 +506,7 @@
       const newId = sections.length > 0 ? Math.max(...sections.map(s => s.id), -1) + 1 : 0;
       sections.push({
         id: newId,
-        name: `Row ${sections.length + 1}`,
+        name: `Bagian ${sections.length + 1}`,
         minPeople: 1,
         maxPeople: 3,
         hasLead: false
@@ -535,7 +540,7 @@
         const configHtml = `
                     <div class="section-config-item">
                         <div>
-                            <span class="section-config-label">Row ${index + 1}</span>
+                            <span class="section-config-label">Bagian ${index + 1}</span>
                             <input type="text" id="sectionName_${section.id}" value="${section.name}" placeholder="Nama row">
                         </div>
                         <div>
@@ -617,7 +622,7 @@
       const allNames = namesList.split('\n').map(name => name.trim()).filter(name => name.length > 0);
       const leadCandidates = leadCandidatesList.split('\n').map(name => name.trim()).filter(name => name.length > 0);
       const presentNames = allNames;
-      const availableLeads = leadCandidates.length > 0 ? presentNames.filter(name => leadCandidates.includes(name)) : presentNames;
+      const availableLeadsAll = leadCandidates.length > 0 ? presentNames.filter(name => leadCandidates.includes(name)) : presentNames.slice();
 
       const totalMax = sections.reduce((sum, sec) => sum + sec.maxPeople, 0);
       const totalMin = sections.reduce((sum, sec) => sum + sec.minPeople, 0);
@@ -627,7 +632,7 @@
       let assignedCount = Math.min(totalAvailable, totalMax);
       let reserveCount = Math.max(0, totalAvailable - totalMax);
 
-      // Buat adjustedCount untuk sections saja (maksimal totalMax orang)
+      // Hitung adjustedCount (jumlah orang per section)
       let adjustedCount = [...sections.map(s => s.minPeople)];
       let remainingPeopleForSections = assignedCount - totalMin;
 
@@ -647,12 +652,11 @@
         }
       }
 
-      // Update section counts
       sections.forEach((section, idx) => {
         section.count = adjustedCount[idx];
       });
 
-      // Siapkan data untuk distribusi
+      // Info alert
       let alertHtml = '';
       if (totalAvailable < totalMin) {
         alertHtml += `<div class="alert alert-warning">⚠️ Hanya ${totalAvailable} pelayan, kurang dari min ${totalMin}</div>`;
@@ -662,30 +666,38 @@
         alertHtml += `<div class="alert alert-warning">⚠️ ${totalAvailable} pelayan, max ${totalMax}</div>`;
       }
 
-      // Distribusi pelayan ke sections
-      const schedule = Array(sections.length).fill().map(() => []);
-      let assignments = [];
-      sections.forEach((section) => {
-        for (let i = 0; i < section.count; i++) {
-          assignments.push(sections.indexOf(section));
+      // 1) Acak urutan semua pelayan
+      const shuffledNames = presentNames.slice().sort(() => Math.random() - 0.5);
+
+      // 2) Siapkan struktur schedule awal (tanpa leader)
+      const schedule = Array(sections.length).fill(null).map(() => []);
+
+      // 3) Isi schedule dari shuffledNames sesuai total yang dibutuhkan (assignedCount)
+      for (let i = 0; i < assignedCount; i++) {
+        // cari index section tujuan berdasarkan adjustedCount
+        let targetSectionIndex = -1;
+        let counter = 0;
+        for (let sIndex = 0; sIndex < sections.length; sIndex++) {
+          const sec = sections[sIndex];
+          const alreadyInSection = schedule[sIndex].length;
+          if (alreadyInSection < sec.count) {
+            if (counter === 0) {
+              targetSectionIndex = sIndex;
+              break;
+            }
+          }
         }
-      });
-
-      // Shuffle assignments
-      assignments.sort(() => Math.random() - 0.5);
-
-      // Assign pelayan ke sections
-      for (let i = 0; i < assignments.length; i++) {
-        schedule[assignments[i]].push(presentNames[i]);
+        if (targetSectionIndex === -1) {
+          // fallback (harusnya tidak terjadi jika count konsisten)
+          targetSectionIndex = i % sections.length;
+        }
+        schedule[targetSectionIndex].push(shuffledNames[i]);
       }
 
-      // Shuffle dalam masing-masing section
-      schedule.forEach(s => s.sort(() => Math.random() - 0.5));
-
-      // Buat reserve section jika ada
+      // 4) Siapkan cadangan (nama setelah assignedCount)
       let reserveSectionHtml = '';
       if (reserveCount > 0) {
-        const reserveNames = presentNames.slice(assignments.length);
+        const reserveNames = shuffledNames.slice(assignedCount);
         reserveNames.sort(() => Math.random() - 0.5);
 
         let reserveMembersHtml = '';
@@ -694,50 +706,79 @@
         });
 
         reserveSectionHtml = `
-                    <div class="section-card reserve-section">
-                        <div class="section-title reserve-title">🪙 CADANGAN (${reserveCount} orang)</div>
-                        <div class="section-members">${reserveMembersHtml}</div>
-                    </div>
-                `;
+      <div class="section-card reserve-section">
+        <div class="section-title reserve-title">🪙 CADANGAN (${reserveCount} orang)</div>
+        <div class="section-members">${reserveMembersHtml}</div>
+      </div>
+    `;
       }
 
-      // Generate HTML untuk sections
+      // 5) Tetapkan leader: setiap section.hasLead true harus dapat 1 leader (jika kandidat cukup)
+      let availableLeads = availableLeadsAll.slice().sort(() => Math.random() - 0.5); // acak kandidat leader global
       let resultsHtml = '';
+
       sections.forEach((section, index) => {
         const members = schedule[index];
         let membersHtml = '';
 
         if (section.hasLead && members.length > 0 && availableLeads.length > 0) {
-          const lead = members.find(n => availableLeads.includes(n));
-          if (lead) {
-            membersHtml += `<div class="member-item" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left-color: var(--color-warning); font-weight: 600;">👑 ${lead} - PEMIMPIN</div>`;
-            members.filter(n => n !== lead).forEach(name => {
-              membersHtml += `<div class="member-item">${name}</div>`;
+          // ambil satu leader dari kandidat yang ada di section ini
+          let leaderIndexInSection = members.findIndex(n => availableLeads.includes(n));
+
+          // jika belum ada kandidat leader di section, tapi masih ada kandidat global,
+          // paksa satu kandidat global pindah ke section ini (jika belum ada dan masih ada slot)
+          if (leaderIndexInSection === -1 && section.count > 0 && schedule[index].length > 0 && availableLeads.length > 0) {
+            const forcedLeader = availableLeads[0];
+            // jika forcedLeader belum ada di section, ganti orang pertama di section dengan forcedLeader
+            if (!members.includes(forcedLeader)) {
+              members[0] = forcedLeader;
+            }
+            leaderIndexInSection = members.findIndex(n => n === forcedLeader);
+          }
+
+          if (leaderIndexInSection !== -1) {
+            const leadName = members[leaderIndexInSection];
+
+            // hapus leader dari daftar kandidat global agar tidak jadi leader di section lain
+            availableLeads = availableLeads.filter(n => n !== leadName);
+
+            // tampilkan leader di atas
+            membersHtml += `<div class="member-item" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left-color: var(--color-warning); font-weight: 600;">👑 ${leadName} - PEMIMPIN</div>`;
+
+            // tampilkan anggota lain
+            members.forEach((name, idxMember) => {
+              if (idxMember !== leaderIndexInSection) {
+                membersHtml += `<div class="member-item">${name}</div>`;
+              }
             });
           } else {
+            // tidak ada kandidat leader sama sekali yang tersedia
             members.forEach(name => {
               membersHtml += `<div class="member-item">${name}</div>`;
             });
           }
         } else {
+          // section tanpa leader atau tidak ada kandidat leader
           members.forEach(name => {
             membersHtml += `<div class="member-item">${name}</div>`;
           });
         }
 
-        resultsHtml += `<div class="section-card">
-                    <div class="section-title">${section.name} (${section.count} orang)</div>
-                    <div class="section-members">${membersHtml}</div>
-                </div>`;
+        resultsHtml += `
+      <div class="section-card">
+        <div class="section-title">${section.name} (${section.count} orang)</div>
+        <div class="section-members">${membersHtml}</div>
+      </div>
+    `;
       });
 
-      // Update stats
+      // 6) Update stats & tampilan
       document.getElementById('statsContainer').innerHTML = `
-                <div class="stat-box"><div class="stat-value">${presentNames.length}</div><div class="stat-label">Total Pelayan</div></div>
-                <div class="stat-box"><div class="stat-value">${sections.length}</div><div class="stat-label">Total Row</div></div>
-                <div class="stat-box"><div class="stat-value">${totalMin}-${totalMax}</div><div class="stat-label">Kapasitas</div></div>
-                ${reserveCount > 0 ? `<div class="stat-box"><div class="stat-value">${reserveCount}</div><div class="stat-label">Cadangan</div></div>` : ''}
-            `;
+    <div class="stat-box"><div class="stat-value">${presentNames.length}</div><div class="stat-label">Total Pelayan</div></div>
+    <div class="stat-box"><div class="stat-value">${sections.length}</div><div class="stat-label">Total Bagian</div></div>
+    <div class="stat-box"><div class="stat-value">${totalMin}-${totalMax}</div><div class="stat-label">Kapasitas</div></div>
+    ${reserveCount > 0 ? `<div class="stat-box"><div class="stat-value">${reserveCount}</div><div class="stat-label">Cadangan</div></div>` : ''}
+  `;
 
       document.getElementById('alertContainer').innerHTML = alertHtml;
       document.getElementById('resultsGrid').innerHTML = resultsHtml + reserveSectionHtml;
